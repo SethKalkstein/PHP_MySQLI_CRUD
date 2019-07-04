@@ -67,91 +67,114 @@
 			$petID = (int) $petID;
 			$humanName = mysqli_real_escape_string($conn, $_POST["humanName"]);
 
-			//get the human selected from the drop down menu from human table (there's a HumanID foreign key, this will insure that it matches an existing one)
+			//get the human selected from the drop down menu human ID from human table (there's a HumanID foreign key, this will insure that it matches an existing one)
 			$sqlHuman = "SELECT humanID FROM Human where humanName = '$humanName';";
 			$humanResult = mysqli_query($conn, $sqlHuman);
 			$oneHuman = mysqli_fetch_all($humanResult, MYSQLI_NUM);
 			$oneHumanID = $oneHuman[0][0];
-
-			//SQL code for update Pet table with data entered by use and humanID that corresponds to the human they chose ($oneHumanID)
+			//test array
+			// print_r($humans);
+			// echo count($humans);
+			// echo $humans[0][0];
+			//$randomHuman = $allHumans[rand(0,count($allHumans)-1)][0];
+			//echo $randomHuman;
+			//insert row into database
+		//	$sqlPets = "INSERT INTO Pet(petAge, petSpecies, petName, humanID) Values($petAge, '$petSpecies', '$petName', '$randomHuman');";
 			$sqlUpdate = "UPDATE Pet SET petAge = $petAge, petSpecies = '$petSpecies', petName = '$petName', humanID = $oneHumanID WHERE petID = $petID;";
-
-			//execute query
 			if(mysqli_query($conn, $sqlUpdate)){
-			//stay on current page
+			//redirect to homepage
 				header("location: #");
 			} else {
 				//generate error message
 				echo "BOO query error: " . mysqli_error($conn);
 			}
-		//if incorrect information was entered, allow edit feilds to remail visable
 		} else {
 			$isEditable = TRUE;
 		}
+		echo "<br/> More stuff! <br/>";
+		echo $selectedHuman;
+		print_r($oneHuman);
+		echo $oneHuman[0][0];
+		echo $humanName;
+		echo "after the more stuff<br/>";
+		echo "<br/>One Human ID is: ".$oneHumanID."<br/>";
+
 	} //end of post check
 
-//when user selects edit from the detail page
 	if(isset($_POST["edit"])){
-		//will set variable to be either edit or cancel
+		echo "I'm IN THE EDIT";
 		$editOrCancel = $_POST["edit"];
-		//
+		echo "<br/>".$editOrCancel."<br/>";
 		$petID = mysqli_real_escape_string($conn, $_POST["id_to_update"]);
-
-		//are the next two lines of code ever used?
 		$isEditable = $_POST["is_editable"];
 		$petIDPath = "$petID=".$petID;
-
-		//check if user has selected to edit or cancel $isEditable will control whether or not an edit form will be visable in the HTML
 		if($editOrCancel == "cancel"){
+			echo "<br/>editOrCancel is edit. Is editable is now FALSE<br/>";
 			$isEditable = FALSE;
 		} else {
+			echo "<br/>editOrCancel is edit. Is editable is now TRUE!<br/>";
 			$isEditable = TRUE;
 		}
+		// header("location: details.php$petIDPath");
 	}
 
-	//check that GET request was received from sending page
+	//check that GET request was received
 	if(isset($_GET['petID'])){
-		//grab the Primary Key (petID)
-		$petID = mysqli_real_escape_string($conn, $_GET["petID"]);
+		// if(!isset($_GET['is_editable']) or !$_GET['is_editable']) {
+		// 	echo "Inside the GET is_editable is false or NULL.";
+			$petID = mysqli_real_escape_string($conn, $_GET["petID"]);
+			echo "Pet ID is as follows: ".$petID;
 
-		//make sql for Pet display
-		$sqlJoinPetRow = "select Pet.petID, Pet.petName, Pet.petAge, Pet.petSpecies, Human.humanName from Human, Pet where Pet.humanID = Human.humanID and Pet.petID = $petID";
+			//make sql for Pet display
+			$sqlJoinPetRow = "select Pet.petID, Pet.petName, Pet.petAge, Pet.petSpecies, Human.humanName from Human, Pet where Pet.humanID = Human.humanID and Pet.petID = $petID";
+			echo "<br/>after the Join statement<br/>";
 
-		//make SQL for list of humans dropdown
-		$sqlHumanList = "select humanName from Human ORDER BY humanName;";
+			//make SQL for list of humans
+			$sqlHumanList = "select humanName from Human ORDER BY humanName;";
 
-		//get the pet query result
-		$result = mysqli_query($conn, $sqlJoinPetRow);
+			//get the pet query result
+			$result = mysqli_query($conn, $sqlJoinPetRow);
+			echo "<br/>after the PET result<br/>";
 
-		//get the human query result
-		$humanListResult = mysqli_query($conn, $sqlHumanList);
+			//get the human query result
+			$humanListResult = mysqli_query($conn, $sqlHumanList);
+			echo "<br/>after the Human result<br/>";
 
-		//fetch the result in array format
-		$pet = mysqli_fetch_assoc($result);
+			//fetch the result in array format
+			$pet = mysqli_fetch_assoc($result);
 
-		//fetch all human names
-		$humanList = mysqli_fetch_all($humanListResult, MYSQLI_NUM);
+			//fetch all human names
+			$humanList = mysqli_fetch_all($humanListResult, MYSQLI_NUM);
 
-		//initialize edit form with data fetched in queries
-		if(isset($_POST["edit"])) {
-			$petName = $pet["petName"];
-			$petSpecies = $pet["petSpecies"];
-			$petAge = $pet["petAge"];
-			$selectedHuman = $pet["humanName"];
-		}
+			//initialize edit form
+			if(isset($_POST["edit"])) {
+				$petName = $pet["petName"];
+				$petSpecies = $pet["petSpecies"];
+				$petAge = $pet["petAge"];
+				$selectedHuman = $pet["humanName"];
+			}
 
-		//first time on the page set initialize editable to false
-		if(!isset($_POST["edit"]) && !isset($_POST["submit"])){
-			$isEditable = FALSE;
-		}
+			//first time on the page set initialize editable to false
+			if(!isset($_POST["edit"]) && !isset($_POST["submit"])){
+				$isEditable = FALSE;
+			}
 
+			echo "after assing pet array";
 			mysqli_free_result($result);
 			mysqli_close($conn);
-	}
-	else {
-		//error messages if GET attribute doesn't exist
+
+			echo "<br/> Here is the PET array</br>";
+			print_r($pet);
+			echo "<br/> Here is the HUMAN array</br>";
+			print_r($humanList);
+			echo "<br/>after the human array.<br/>";
+			echo $humanList[2][0];
+		// }
+
+	} else {
 		echo "NO GET";
 		echo "upload problems as follows: " . mysqli_error($conn);
+		//error message
 	}
  ?>
 
@@ -216,7 +239,7 @@
 				<input type="hidden" name="id_to_delete" value="<?php echo $pet['petID'] ?>">
 				<input type="submit" name="delete" value="deletes">
 			</form>
-			<!-- edit form that can enable another form instead of the delete values on the same page? -->
+			<!-- possible edit form that can enable another form instead of the delete values on the same page? -->
 			<form action="details.php?petID=<?php echo $petID ?> " method="POST">
 				<input type="hidden" name="is_editable" value="<?php echo $isEditable ?>">
 				<input type="submit" name="edit" value="edit">
