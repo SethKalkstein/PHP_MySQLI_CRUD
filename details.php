@@ -226,10 +226,4 @@
 
 	</div>
 
-<!-- askdjfadsk;ljfhlkjsdahflkjadsf
-asd;fkjasd,ljfh;laskdjf
-asdlfkjasdl,fkjas;d.kfj
-asdf.kasd'.flk'asdl/fk'alskdf -->
-
-
 <?php require("templates/footer.php");?>
