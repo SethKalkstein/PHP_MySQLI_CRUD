@@ -3,11 +3,8 @@
 <head>
 	<title>Database Connection Test</title>
 </head>
+<!-- girlfriend was unhappy with the way that the nav looked, so made it more palatable for her. Who needs flowers -->
 <style type="text/css">
-	/**{
-		padding: 0;
-		margin: 0;
-	}*/
 	header, body {
 		margin: 0;
 	}
@@ -42,9 +39,9 @@
 		color: #b51d8c;
 	}
 
-	nav ul li:hover {
+	/* nav ul li:hover {
 		background-color: #fad9f1;
-	}
+	} */
 
 </style>
 <body>
