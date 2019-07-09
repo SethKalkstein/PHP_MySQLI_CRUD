@@ -6,7 +6,7 @@
 	if(isset($_POST["delete"])){
 		$id_to_delete = mysqli_real_escape_string($conn, $_POST["id_to_delete"]);
 		$sqlDelete = "DELETE FROM Pet WHERE petID = $id_to_delete";
-
+		//redirects to index on delete
 		if(mysqli_query($conn, $sqlDelete)){
 			header("location: index.php");
 		} else{
@@ -35,6 +35,7 @@
 			$inputErrors["petName"] = "a pet name is needed<br/>";
 		} else {
 			$petName = $_POST["petName"];
+			//check that entry is valid
 			if (!(ctype_alnum(str_replace($isValid, "", $petName)) && strlen($petName) <= 75)) {
 				$inputErrors["petName"] = "Boo, $petName It not valid letters numbers or characters.";
 			}
@@ -54,7 +55,7 @@
 		} else {
 			$petSpecies = $_POST["petSpecies"];
 			if (!(ctype_alnum(str_replace($isValid, "", $petSpecies)) && strlen($petSpecies) <= 50)){
-			$inputErrors["petSpecies"] = "Boo, $petSpecies not valid letters, numbers or characters. ";
+				$inputErrors["petSpecies"] = "Boo, $petSpecies not valid letters, numbers or characters. ";
 			}
 		}
 		//execute if input entry is successful
@@ -179,7 +180,7 @@
 		<h2>Edit Below</h2>
 
 		<?php if($isEditable): ?>
-
+			<!-- form for taking in new information -->
 			<form action="details.php?petID=<?php echo $petID ?> " method="POST">
 				<label>Pet Name: </label>
 				<input type="text" name="petName" value="<?php echo htmlspecialchars($petName); ?>">
@@ -199,10 +200,10 @@
 				 		<option value="<?php echo $h[0]; ?>" <?php if($h[0] == $selectedHuman){echo "selected";} ?> > <?php echo $h[0] ?> </option>
 				 	<?php endforeach; ?>
 				 </select>
-
+				<!-- submit the edit -->
 				<input type="submit" name="submit" value="submit">
 			</form>
-
+			<!-- cancel button -->
 			<form action="details.php?petID=<?php echo $petID ?> " method="POST">
 
 				<input type="hidden" name="is_editable" value="<?php echo $isEditable ?>">
