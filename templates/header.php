@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Database Connection Test</title>
+	<title>Pet Crud</title>
 </head>
-<!-- girlfriend was unhappy with the way that the nav looked, so made it more palatable for her. Who needs flowers -->
+<!-- girlfriend was unhappy with the way that the nav looked, so made it more palatable for her. -->
 <style type="text/css">
 	header, body {
 		margin: 0;
@@ -39,9 +39,10 @@
 		color: #b51d8c;
 	}
 
-	/* nav ul li:hover {
-		background-color: #fad9f1;
-	} */
+	footer {
+		background-color: lavender;
+		line-height: 8rem;
+	}
 
 </style>
 <body>
@@ -52,5 +53,5 @@
 				<li><a href="add.php">Add Pet</a></li>
 			</ul>
 		</nav>
-		<h1>Pets Pets Pets Galore</h1>
+		<h1>Pet CRUD</h1>
 	</header>

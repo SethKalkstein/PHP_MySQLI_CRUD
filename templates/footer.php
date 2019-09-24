@@ -1,5 +1,5 @@
 	<footer>
-		<p>&copy Copyright Seth's Cute Cute Cute Pets</p>
+		<p>&copy Kirk's Cute CRUD Pets</p>
 	</footer>
 </body>
 

@@ -21,8 +21,6 @@
 
 <?php require("templates/header.php");?>
 
-	<h2>PhP MySql connection test</h2>
-
 	<h3>Pets from Database</h3>
 
 	<?php $petCount = count($pets); ?>
