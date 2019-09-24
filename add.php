@@ -55,7 +55,8 @@
 			$sqlPets = "INSERT INTO Pet(petAge, petSpecies, petName, humanID) Values($petAge, '$petSpecies', '$petName', '$randomHuman');";
 
 			if(mysqli_query($conn, $sqlPets)){
-			//redirect to homepage
+			//clsoe database and redirect to homepage
+				mysqli_close($conn);
 				header("location: index.php");
 			} else {
 				//generate error message

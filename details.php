@@ -8,6 +8,7 @@
 		$sqlDelete = "DELETE FROM Pet WHERE petID = $id_to_delete";
 		//redirects to index on delete
 		if(mysqli_query($conn, $sqlDelete)){
+			mysqli_close($conn);
 			header("location: index.php");
 		} else{
 			echo "query error: ".mysqli_error($conn);
@@ -15,20 +16,18 @@
 
 	}
 
-		//initialize error message array
-		$inputErrors = array("petName" => "", "petAge" => "", "petSpecies" => "");
+	//initialize error message array
+	$inputErrors = array("petName" => "", "petAge" => "", "petSpecies" => "");
 
-		//acceptable characters
-		$isValid = array("'", "-", ",", ".", " ");
+	//acceptable characters
+	$isValid = array("'", "-", ",", ".", " ");
 
 	//check to see if submit for edit has been pressed
 	if(isset($_POST["submit"])){
 		//get pet ID from URL
 		$petID = $_GET['petID'];
-		echo "<br/>Submit Edit Pet ID: ".$petID."<br/>";
 		//get the human name associated with the pet
 		$selectedHuman = $_POST["humanName"];
-		echo "<br/> THis is the newly selected Human: ".$selectedHuman;
 
 		//check for empy input fields
 		if(empty($_POST["petName"])){
@@ -79,6 +78,7 @@
 
 			//execute query
 			if(mysqli_query($conn, $sqlUpdate)){
+				mysqli_close($conn);
 			//stay on current page
 				header("location: #");
 			} else {
@@ -153,6 +153,7 @@
 		//error messages if GET attribute doesn't exist
 		echo "NO GET";
 		echo "upload problems as follows: " . mysqli_error($conn);
+		mysqli_close($conn);
 	}
  ?>
 
@@ -164,10 +165,14 @@
 		<?php if($pet): ?>
 			<h3><?php echo htmlspecialchars($pet[petName]); ?></h3>
 			<ul>
-				<?php foreach($pet as $meow => $purr): ?>
-					<?php if($meow != "petID" && $meow != "petName"): ?>
+				<?php
+					$labels = ["petAge" => "Pet's Age", "petSpecies" => "Pet's Species", "humanName" => "Human's Name"]; 
+
+					foreach($pet as $tableColumn => $recordValue): 
+					
+						if($tableColumn != "petID" && $tableColumn != "petName"): ?>
 						<li>
-							<?php echo htmlspecialchars($meow) . ": " . htmlspecialchars($purr); ?>
+							<?php echo htmlspecialchars($labels[$tableColumn]) . ": " . htmlspecialchars($recordValue); ?>
 						</li>
 					<?php endif; ?>
 				<?php endforeach; ?>
@@ -215,12 +220,12 @@
 		<!-- delete form -->
 			<form action="details.php" method="POST">
 				<input type="hidden" name="id_to_delete" value="<?php echo $pet['petID'] ?>">
-				<input type="submit" name="delete" value="deletes">
+				<input type="submit" name="delete" value="Delete">
 			</form>
-			<!-- edit form that can enable another form instead of the delete values on the same page? -->
+			<!-- Edit form that will enable another form for editing and replaces the delete form on this page -->
 			<form action="details.php?petID=<?php echo $petID ?> " method="POST">
 				<input type="hidden" name="is_editable" value="<?php echo $isEditable ?>">
-				<input type="submit" name="edit" value="edit">
+				<input type="submit" name="edit" value="Edit">
 			</form>
 
 		<?php endif; ?>
